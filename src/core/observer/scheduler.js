@@ -40,14 +40,12 @@ function flushSchedulerQueue () {
   let watcher, id
 
   // Sort queue before flush.
-  // This ensures that:
-  // 1. Components are updated from parent to child. (because parent is always
+  // This ensures that (optimized for mpvue):
+  // 1. Components are updated from child to parent. (because parent is always
   //    created before the child)
-  // 2. A component's user watchers are run before its render watcher (because
+  // 2. A component's user watchers are run after its render watcher (because
   //    user watchers are created before the render watcher)
-  // 3. If a component is destroyed during a parent component's watcher run,
-  //    its watchers can be skipped.
-  queue.sort((a, b) => a.id - b.id)
+  queue.sort((a, b) => b.id - a.id)
 
   // do not cache length because more watchers might be pushed
   // as we run existing watchers
